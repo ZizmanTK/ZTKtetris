@@ -1,14 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
+using ZKTris.Core;
 
-
+// Next / Hold piece previews.
 public class Form : MonoBehaviour
 {
-    //public PositionOnGrid[] monos;
-    //public Forms form;
-    //public int activeMonos;
-    // Start is called before the first frame update
     public Image preview;
+    public Image holdPreview;
     public Sprite L;
     public Sprite Z;
     public Sprite T;
@@ -16,126 +14,32 @@ public class Form : MonoBehaviour
     public Sprite J;
     public Sprite S;
     public Sprite I;
-    void Awake()
+
+    public void DisplayNextForm(PieceType next)
     {
-        //monos = GetComponent<MoveTetrimonos>().monos;
+        preview.sprite = SpriteFor(next);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void DisplayHold(PieceType? held, bool available)
     {
-
+        if (holdPreview == null) return;
+        holdPreview.enabled = held.HasValue;
+        if (held.HasValue) holdPreview.sprite = SpriteFor(held.Value);
+        // Dimmed while hold can't be used again for this piece.
+        holdPreview.color = available ? Color.white : new Color(1f, 1f, 1f, 0.35f);
     }
 
-
-
-    public static void ChangeForm(PositionOnGrid[] monos, Forms form)
+    Sprite SpriteFor(PieceType type)
     {
-        int refI = monos[0].spawnI, refJ = monos[0].spawnJ;
-        switch (form)
+        switch (type)
         {
-            case Forms.L:
-                monos[1].spawnI = refI - 1;
-                monos[2].spawnI = refI - 2;
-                monos[3].spawnI = refI - 2;
-
-                monos[1].spawnJ = refJ;
-                monos[2].spawnJ = refJ;
-                monos[3].spawnJ = refJ + 1;
-                break;
-            case Forms.Z:
-                monos[1].spawnI = refI;
-                monos[2].spawnI = refI - 1;
-                monos[3].spawnI = refI - 1;
-
-                monos[1].spawnJ = refJ +1;
-                monos[2].spawnJ = refJ + 1;
-                monos[3].spawnJ = refJ + 2;
-                break;
-            case Forms.T:
-                monos[1].spawnI = refI - 1;
-                monos[2].spawnI = refI - 1;
-                monos[3].spawnI = refI - 1;
-
-                monos[1].spawnJ = refJ;
-                monos[2].spawnJ = refJ + 1;
-                monos[3].spawnJ = refJ - 1;
-                break;
-            case Forms.O:
-                monos[1].spawnI = refI;
-                monos[2].spawnI = refI - 1;
-                monos[3].spawnI = refI - 1;
-
-                monos[1].spawnJ = refJ + 1;
-                monos[2].spawnJ = refJ;
-                monos[3].spawnJ = refJ + 1;
-                break;
-            case Forms.J:
-                monos[1].spawnI = refI - 1;
-                monos[2].spawnI = refI - 2;
-                monos[3].spawnI = refI - 2;
-
-                monos[1].spawnJ = refJ;
-                monos[2].spawnJ = refJ;
-                monos[3].spawnJ = refJ - 1;
-                break;
-            case Forms.S:
-                monos[1].spawnI = refI;
-                monos[2].spawnI = refI - 1;
-                monos[3].spawnI = refI - 1;
-
-                monos[1].spawnJ = refJ - 1;
-                monos[2].spawnJ = refJ - 1;
-                monos[3].spawnJ = refJ - 2;
-                break;
-            case Forms.I:
-                monos[1].spawnI = refI - 1;
-                monos[2].spawnI = refI - 2;
-                monos[3].spawnI = refI - 3;
-
-                monos[1].spawnJ = refJ;
-                monos[2].spawnJ = refJ;
-                monos[3].spawnJ = refJ;
-                break;
+            case PieceType.L: return L;
+            case PieceType.Z: return Z;
+            case PieceType.T: return T;
+            case PieceType.O: return O;
+            case PieceType.J: return J;
+            case PieceType.S: return S;
+            default: return I;
         }
-    }
-
-
-    public void DisplayNextForm( Forms nextForm)
-    {
-        switch (nextForm)
-        {
-            case Forms.S:
-                preview.sprite = S;
-                break;
-            case Forms.L:
-                preview.sprite = L;
-                break;
-            case Forms.J:
-                preview.sprite = J;
-                break;
-            case Forms.Z:
-                preview.sprite = Z;
-                break;
-            case Forms.T:
-                preview.sprite = T;
-                break;
-            case Forms.O:
-                preview.sprite = O;
-                break;
-            case Forms.I:
-                preview.sprite = I;
-                break;
-        }
-    }
-    public enum Forms
-    {
-        L,
-        Z,
-        T,
-        O,
-        J,
-        S,
-        I,
     }
 }
