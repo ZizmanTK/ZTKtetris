@@ -19,6 +19,8 @@ public static class BuildScript
         PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Gzip;
         PlayerSettings.WebGL.decompressionFallback = true;
         PlayerSettings.WebGL.dataCaching = true;
+        // Default is "shorter build time"; release builds should be small.
+        UnityEditor.WebGL.UserBuildSettings.codeOptimization = UnityEditor.WebGL.WasmCodeOptimization.DiskSizeLTO;
         Build(BuildTarget.WebGL, Path.Combine(BuildRoot, "WebGL"));
     }
 
