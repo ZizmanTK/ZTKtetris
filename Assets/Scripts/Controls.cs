@@ -1,8 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Menu buttons (pause, full screen, music, sounds, quit) and the keyboard
+// shortcuts for pausing and restarting.
 public class Controls : MonoBehaviour
 {
     public Animator camAnim;
@@ -10,22 +10,32 @@ public class Controls : MonoBehaviour
     public TetrimonoBehaviour behaviour;
     public MoveTetrimonos moves;
     public Sounds sounds;
-    // Start is called before the first frame update
+    public Hud hud;
+    public GameObject quitButton;
+
+    Toggle pauseToggle;
+
     void Start()
     {
+        pauseToggle = pauseText.GetComponentInParent<Toggle>();
         Screen.fullScreen = false;
-        TogglePause();
+#if UNITY_WEBGL
+        // Application.Quit does nothing in a browser.
+        if (quitButton != null) quitButton.SetActive(false);
+#endif
+        SetPaused(true);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
-    }
-
-    public void Pause_Play()
-    {
-
+        if (behaviour.IsGameOver)
+        {
+            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.R))
+                Restart();
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+            TogglePause();
     }
 
     public void ToggleFullScreen()
@@ -35,7 +45,7 @@ public class Controls : MonoBehaviour
 
     public void ToggleMusic()
     {
-        if (sounds.musicPlaying) 
+        if (sounds.musicPlaying)
         {
             sounds.PauseMusic();
             sounds.musicPlaying = false;
@@ -43,12 +53,13 @@ public class Controls : MonoBehaviour
         else
         {
             sounds.PlayMusic();
-            sounds.musicPlaying=true;
+            sounds.musicPlaying = true;
         }
     }
+
     public void ToggleSounds()
     {
-            sounds.soundsON = !sounds.soundsON;
+        sounds.soundsON = !sounds.soundsON;
     }
 
     public void Quit()
@@ -58,21 +69,29 @@ public class Controls : MonoBehaviour
 
     public void TogglePause()
     {
-        if (behaviour.gamePaused)
+        if (behaviour.IsGameOver)
         {
-            camAnim.SetBool("Paused", false);
-            pauseText.text = "Pause";
-            behaviour.StartFall();
-            moves.enabled = true;
-            behaviour.gamePaused = false;
+            if (pauseToggle != null) pauseToggle.SetIsOnWithoutNotify(!behaviour.gamePaused);
+            return;
         }
-        else
-        {
-            camAnim.SetBool("Paused", true);
-            pauseText.text = "Play";
-            behaviour.StopFall();
-            moves.enabled = false;
-            behaviour.gamePaused = true;
-        }
+        SetPaused(!behaviour.gamePaused);
+    }
+
+    public void Restart()
+    {
+        behaviour.NewGame();
+        SetPaused(false);
+    }
+
+    void SetPaused(bool paused)
+    {
+        camAnim.SetBool("Paused", paused);
+        pauseText.text = paused ? "Play" : "Pause";
+        // Keep the toggle in sync when pausing from the keyboard, without
+        // firing its OnValueChanged (which would toggle again).
+        if (pauseToggle != null) pauseToggle.SetIsOnWithoutNotify(!paused);
+        moves.enabled = !paused;
+        behaviour.gamePaused = paused;
+        hud.ShowPaused(paused);
     }
 }
