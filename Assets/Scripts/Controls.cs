@@ -12,8 +12,10 @@ public class Controls : MonoBehaviour
     public Sounds sounds;
     public Hud hud;
     public GameObject quitButton;
+    public Toggle fullScreenToggle;
 
     Toggle pauseToggle;
+    float fullScreenRequestTime = -10f;
 
     void Start()
     {
@@ -28,6 +30,8 @@ public class Controls : MonoBehaviour
 
     void Update()
     {
+        SyncFullScreenToggle();
+
         if (behaviour.IsGameOver)
         {
             if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.R))
@@ -38,9 +42,20 @@ public class Controls : MonoBehaviour
             TogglePause();
     }
 
+    // Esc (or the browser) can leave full screen without touching the
+    // toggle. Browsers switch asynchronously, so give a request a moment
+    // before trusting Screen.fullScreen again.
+    void SyncFullScreenToggle()
+    {
+        if (fullScreenToggle == null || Time.unscaledTime - fullScreenRequestTime < 1f) return;
+        if (fullScreenToggle.isOn != Screen.fullScreen)
+            fullScreenToggle.SetIsOnWithoutNotify(Screen.fullScreen);
+    }
+
     public void ToggleFullScreen()
     {
         Screen.fullScreen = !Screen.fullScreen;
+        fullScreenRequestTime = Time.unscaledTime;
     }
 
     public void ToggleMusic()
@@ -86,7 +101,7 @@ public class Controls : MonoBehaviour
     void SetPaused(bool paused)
     {
         camAnim.SetBool("Paused", paused);
-        pauseText.text = paused ? "Play" : "Pause";
+        pauseText.text = paused ? "PLAY" : "PAUSE";
         // Keep the toggle in sync when pausing from the keyboard, without
         // firing its OnValueChanged (which would toggle again).
         if (pauseToggle != null) pauseToggle.SetIsOnWithoutNotify(!paused);
