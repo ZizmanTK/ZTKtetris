@@ -101,7 +101,7 @@ public class Controls : MonoBehaviour
     void SetPaused(bool paused)
     {
         camAnim.SetBool("Paused", paused);
-        pauseText.text = paused ? "PLAY" : "PAUSE";
+        pauseText.text = paused ? "Play" : "Pause";
         // Keep the toggle in sync when pausing from the keyboard, without
         // firing its OnValueChanged (which would toggle again).
         if (pauseToggle != null) pauseToggle.SetIsOnWithoutNotify(!paused);

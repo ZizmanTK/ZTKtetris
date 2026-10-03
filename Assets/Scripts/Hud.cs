@@ -4,8 +4,11 @@ using UnityEngine.UI;
 // Score panel, banners ("LEVEL 3", "ZKTRIS!"), pause hint and game over.
 public class Hud : MonoBehaviour
 {
-    public static readonly Color AccentColor = new Color(1f, 0.78f, 0.25f);
-    public static readonly Color HoleColor = new Color(0.86f, 0.25f, 0.27f);
+    // Palette taken from the original art: the crimson of the piece
+    // previews, the red of the hole block and the dark grey UI text.
+    public static readonly Color AccentColor = new Color(0.808f, 0.173f, 0.255f);
+    public static readonly Color HoleColor = new Color(0.78f, 0.24f, 0.25f);
+    public static readonly Color TextColor = new Color(0.196f, 0.196f, 0.196f);
 
     public Text score;
     public Text best;
