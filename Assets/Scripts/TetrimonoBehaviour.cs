@@ -201,7 +201,7 @@ public class TetrimonoBehaviour : MonoBehaviour
 
             if (score.Level > levelBefore) hud.ShowBanner("LEVEL " + score.Level, Hud.AccentColor);
             else if (cleared == 4) hud.ShowBanner("ZKTRIS!", Hud.AccentColor);
-            else if (cleared > 1) hud.ShowBanner(cleared == 2 ? "DOUBLE" : "TRIPLE", Color.white);
+            else if (cleared > 1) hud.ShowBanner(cleared == 2 ? "DOUBLE" : "TRIPLE", Hud.TextColor);
         }
 
         UpdateHud();
