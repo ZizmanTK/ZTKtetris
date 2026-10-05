@@ -1,11 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using ZKTris.Core;
 
-// Next / Hold piece previews.
+// Next queue and Hold previews.
 public class Form : MonoBehaviour
 {
-    public Image preview;
+    // Next queue slots, nearest first.
+    public Image[] nextPreviews;
     public Image holdPreview;
     public Sprite L;
     public Sprite Z;
@@ -15,9 +17,14 @@ public class Form : MonoBehaviour
     public Sprite S;
     public Sprite I;
 
-    public void DisplayNextForm(PieceType next)
+    public void DisplayNext(IReadOnlyList<PieceType> upcoming)
     {
-        preview.sprite = SpriteFor(next);
+        for (int i = 0; i < nextPreviews.Length; i++)
+        {
+            bool shown = i < upcoming.Count;
+            nextPreviews[i].enabled = shown;
+            if (shown) nextPreviews[i].sprite = SpriteFor(upcoming[i]);
+        }
     }
 
     public void DisplayHold(PieceType? held, bool available)
