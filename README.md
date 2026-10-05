@@ -17,13 +17,13 @@ Every gap you leave under a block turns into a crossed-out hole. Holes are perma
 | Soft drop | ↓ or S |
 | Hard drop | Space |
 | Hold | C or Shift |
-| Pause / play | P, Esc or Enter |
+| Pause menu | Esc or P (↑↓ and Enter to pick, ←→ to switch a setting) |
 | Restart after game over | Enter or R |
 
 ## Features
 
 - Score, level, lines and hole counter; best score is saved.
-- Ghost piece, hold piece, 7-bag randomizer, lock delay and wall kicks.
+- Ghost piece, hold piece, 3-piece Next queue, 7-bag randomizer, lock delay and wall kicks.
 - Speed goes up every 10 lines.
 - Screen shake, particles and row flashes on clears and holes.
 
@@ -45,3 +45,7 @@ Build WebGL and Windows into `Builds/` (also available from the **ZKTris** menu 
 ```bash
 Unity.exe -batchmode -quit -projectPath . -executeMethod BuildScript.BuildAll
 ```
+
+## Credits
+
+UI font: [Barlow Condensed](https://github.com/jpt/barlow) by The Barlow Project Authors, SIL Open Font License 1.1 (`Assets/Fonts/OFL.txt`).

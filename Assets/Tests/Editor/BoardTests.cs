@@ -214,3 +214,17 @@ public class ScoreAndBagTests
         }
     }
 }
+
+public class PieceQueueTests
+{
+    [Test]
+    public void Take_ReturnsTheFirstUpcomingPieceAndKeepsTheSize()
+    {
+        var queue = new PieceQueue(new PieceBag(seed: 7), 3);
+        var first = queue.Upcoming[0];
+        var second = queue.Upcoming[1];
+        Assert.AreEqual(first, queue.Take());
+        Assert.AreEqual(second, queue.Upcoming[0]);
+        Assert.AreEqual(3, queue.Upcoming.Count);
+    }
+}

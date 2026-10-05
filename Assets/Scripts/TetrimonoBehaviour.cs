@@ -12,6 +12,7 @@ public class TetrimonoBehaviour : MonoBehaviour
     public Sounds sounds;
     public Form form;
     public Hud hud;
+    public PauseMenu menu;
     public GameFeel feel;
     // The four blocks of the falling piece, and of its ghost.
     public PositionOnGrid[] monos;
@@ -30,9 +31,8 @@ public class TetrimonoBehaviour : MonoBehaviour
     public bool SoftDropping { get; set; }
 
     readonly ScoreKeeper score = new ScoreKeeper();
-    PieceBag bag;
+    PieceQueue queue;
     Tetromino current;
-    PieceType next;
     PieceType? held;
     bool holdUsed;
     int color;
@@ -53,12 +53,10 @@ public class TetrimonoBehaviour : MonoBehaviour
     {
         instance.ResetBoard();
         score.Reset();
-        bag = new PieceBag();
+        queue = new PieceQueue(new PieceBag(), 3);
         held = null;
-        next = bag.Next();
         IsGameOver = false;
-        hud.HideGameOver();
-        Spawn(bag.Next());
+        Spawn(queue.Take());
         UpdateHud();
     }
 
@@ -147,12 +145,7 @@ public class TetrimonoBehaviour : MonoBehaviour
         Render();
     }
 
-    PieceType TakeNext()
-    {
-        var type = next;
-        next = bag.Next();
-        return type;
-    }
+    PieceType TakeNext() => queue.Take();
 
     void Spawn(PieceType type)
     {
@@ -162,7 +155,7 @@ public class TetrimonoBehaviour : MonoBehaviour
         fallTimer = 0f;
         lockTimer = 0f;
         lockResets = 0;
-        form.DisplayNextForm(next);
+        form.DisplayNext(queue.Upcoming);
         form.DisplayHold(held, true);
 
         // Block out: no room to spawn.
@@ -229,7 +222,7 @@ public class TetrimonoBehaviour : MonoBehaviour
         feel.GameOver();
         foreach (var ghost in ghosts) ghost.Hide();
         UpdateHud();
-        hud.ShowGameOver(score.Score, best, newBest);
+        menu.ShowGameOver(score.Score, best, newBest);
     }
 
     void UpdateHud()

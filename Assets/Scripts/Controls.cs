@@ -1,75 +1,61 @@
 using UnityEngine;
-using UnityEngine.UI;
 
-// Menu buttons (pause, full screen, music, sounds, quit) and the keyboard
-// shortcuts for pausing and restarting.
+// Game state switches (pause, restart) and settings (music, sounds, full
+// screen). The pause screen (PauseMenu) is the UI for all of them.
 public class Controls : MonoBehaviour
 {
     public Animator camAnim;
-    public Text pauseText;
     public TetrimonoBehaviour behaviour;
     public MoveTetrimonos moves;
     public Sounds sounds;
-    public Hud hud;
-    public GameObject quitButton;
-    public Toggle fullScreenToggle;
+    public PauseMenu menu;
 
-    Toggle pauseToggle;
-    float fullScreenRequestTime = -10f;
+    bool started;
+
+    public bool MusicOn => sounds.musicPlaying;
+    public bool SoundsOn => sounds.soundsON;
+    public bool FullScreen => Screen.fullScreen;
+    public bool CanQuit => Application.platform != RuntimePlatform.WebGLPlayer;
 
     void Start()
     {
-        pauseToggle = pauseText.GetComponentInParent<Toggle>();
         Screen.fullScreen = false;
-#if UNITY_WEBGL
-        // Application.Quit does nothing in a browser.
-        if (quitButton != null) quitButton.SetActive(false);
-#endif
         SetPaused(true);
     }
 
     void Update()
     {
-        SyncFullScreenToggle();
-
         if (behaviour.IsGameOver)
         {
-            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.R))
-                Restart();
+            if (Input.GetKeyDown(KeyCode.R)) Restart();
             return;
         }
-        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
             TogglePause();
     }
 
-    // Esc (or the browser) can leave full screen without touching the
-    // toggle. Browsers switch asynchronously, so give a request a moment
-    // before trusting Screen.fullScreen again.
-    void SyncFullScreenToggle()
+    public void TogglePause()
     {
-        if (fullScreenToggle == null || Time.unscaledTime - fullScreenRequestTime < 1f) return;
-        if (fullScreenToggle.isOn != Screen.fullScreen)
-            fullScreenToggle.SetIsOnWithoutNotify(Screen.fullScreen);
+        if (behaviour.IsGameOver) return;
+        SetPaused(!behaviour.gamePaused);
+    }
+
+    public void Restart()
+    {
+        behaviour.NewGame();
+        SetPaused(false);
     }
 
     public void ToggleFullScreen()
     {
         Screen.fullScreen = !Screen.fullScreen;
-        fullScreenRequestTime = Time.unscaledTime;
     }
 
     public void ToggleMusic()
     {
-        if (sounds.musicPlaying)
-        {
-            sounds.PauseMusic();
-            sounds.musicPlaying = false;
-        }
-        else
-        {
-            sounds.PlayMusic();
-            sounds.musicPlaying = true;
-        }
+        if (sounds.musicPlaying) sounds.PauseMusic();
+        else sounds.PlayMusic();
+        sounds.musicPlaying = !sounds.musicPlaying;
     }
 
     public void ToggleSounds()
@@ -82,31 +68,13 @@ public class Controls : MonoBehaviour
         Application.Quit();
     }
 
-    public void TogglePause()
-    {
-        if (behaviour.IsGameOver)
-        {
-            if (pauseToggle != null) pauseToggle.SetIsOnWithoutNotify(!behaviour.gamePaused);
-            return;
-        }
-        SetPaused(!behaviour.gamePaused);
-    }
-
-    public void Restart()
-    {
-        behaviour.NewGame();
-        SetPaused(false);
-    }
-
     void SetPaused(bool paused)
     {
         camAnim.SetBool("Paused", paused);
-        pauseText.text = paused ? "PLAY" : "PAUSE";
-        // Keep the toggle in sync when pausing from the keyboard, without
-        // firing its OnValueChanged (which would toggle again).
-        if (pauseToggle != null) pauseToggle.SetIsOnWithoutNotify(!paused);
         moves.enabled = !paused;
         behaviour.gamePaused = paused;
-        hud.ShowPaused(paused);
+        if (paused) menu.ShowPaused(started ? PauseMenu.Mode.Paused : PauseMenu.Mode.Start);
+        else menu.Hide();
+        started |= !paused;
     }
 }
