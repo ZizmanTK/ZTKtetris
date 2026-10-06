@@ -1,31 +1,49 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
+// Game state switches (pause, restart) and settings (music, sounds, full
+// screen). The pause screen (PauseMenu) is the UI for all of them.
 public class Controls : MonoBehaviour
 {
     public Animator camAnim;
-    public Text pauseText;
     public TetrimonoBehaviour behaviour;
     public MoveTetrimonos moves;
     public Sounds sounds;
-    // Start is called before the first frame update
+    public PauseMenu menu;
+
+    bool started;
+
+    public bool MusicOn => sounds.musicPlaying;
+    public bool SoundsOn => sounds.soundsON;
+    public bool FullScreen => Screen.fullScreen;
+    public bool CanQuit => Application.platform != RuntimePlatform.WebGLPlayer;
+
     void Start()
     {
         Screen.fullScreen = false;
-        TogglePause();
+        SetPaused(true);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (behaviour.IsGameOver)
+        {
+            if (Input.GetKeyDown(KeyCode.R)) Restart();
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
+            TogglePause();
     }
 
-    public void Pause_Play()
+    public void TogglePause()
     {
+        if (behaviour.IsGameOver) return;
+        SetPaused(!behaviour.gamePaused);
+    }
 
+    public void Restart()
+    {
+        behaviour.NewGame();
+        SetPaused(false);
     }
 
     public void ToggleFullScreen()
@@ -35,20 +53,14 @@ public class Controls : MonoBehaviour
 
     public void ToggleMusic()
     {
-        if (sounds.musicPlaying) 
-        {
-            sounds.PauseMusic();
-            sounds.musicPlaying = false;
-        }
-        else
-        {
-            sounds.PlayMusic();
-            sounds.musicPlaying=true;
-        }
+        if (sounds.musicPlaying) sounds.PauseMusic();
+        else sounds.PlayMusic();
+        sounds.musicPlaying = !sounds.musicPlaying;
     }
+
     public void ToggleSounds()
     {
-            sounds.soundsON = !sounds.soundsON;
+        sounds.soundsON = !sounds.soundsON;
     }
 
     public void Quit()
@@ -56,23 +68,13 @@ public class Controls : MonoBehaviour
         Application.Quit();
     }
 
-    public void TogglePause()
+    void SetPaused(bool paused)
     {
-        if (behaviour.gamePaused)
-        {
-            camAnim.SetBool("Paused", false);
-            pauseText.text = "Pause";
-            behaviour.StartFall();
-            moves.enabled = true;
-            behaviour.gamePaused = false;
-        }
-        else
-        {
-            camAnim.SetBool("Paused", true);
-            pauseText.text = "Play";
-            behaviour.StopFall();
-            moves.enabled = false;
-            behaviour.gamePaused = true;
-        }
+        camAnim.SetBool("Paused", paused);
+        moves.enabled = !paused;
+        behaviour.gamePaused = paused;
+        if (paused) menu.ShowPaused(started ? PauseMenu.Mode.Paused : PauseMenu.Mode.Start);
+        else menu.Hide();
+        started |= !paused;
     }
 }

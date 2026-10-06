@@ -1,20 +1,13 @@
 using UnityEngine;
 
+// Flash played over a cleared row.
 public class Effects : MonoBehaviour
 {
-    // Start is called before the first frame update
     Animator animator;
-    SpriteRenderer spriteRenderer;
+
     void Awake()
     {
         animator = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     public void PlayAtPosition(float y)
@@ -23,4 +16,3 @@ public class Effects : MonoBehaviour
         animator.SetTrigger("play");
     }
 }
-
