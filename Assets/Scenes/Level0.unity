@@ -1721,19 +1721,58 @@ MonoBehaviour:
   music: {fileID: 282646282}
   sounds: {fileID: 282646281}
   main: {fileID: 8300000, guid: f887cdcae36480e4385ff6e836dad972, type: 3}
-  shift: {fileID: 8300000, guid: 3d113546b33db5143a33394874f68a3a, type: 3}
-  rotate: {fileID: 8300000, guid: 7f0ee8d80defa8d4f941da4d8113a7ac, type: 3}
-  lockPiece: {fileID: 8300000, guid: 4f228dd99926b454390592d67e16db38, type: 3}
-  hardDrop: {fileID: 8300000, guid: 7bf4e83089b06404a8ec11ce615f274c, type: 3}
-  hold: {fileID: 8300000, guid: a26608b9b19a542478b48d01057c1268, type: 3}
-  clear: {fileID: 8300000, guid: add4eb3e77f19bf4eb15b0c50de3b15d, type: 3}
-  bigClear: {fileID: 8300000, guid: 1c6b77fa7ea516b4f83fa398cb8584f8, type: 3}
-  hole: {fileID: 8300000, guid: dcb1c0fd0e57fec41bb085dedc8a005a, type: 3}
-  levelUp: {fileID: 8300000, guid: 268bcf61d845b344c851e53cf7377050, type: 3}
-  gameOver: {fileID: 8300000, guid: 807d33e3c28c48646999eefebd43edcc, type: 3}
-  menuMove: {fileID: 8300000, guid: a5f18abf11e172e44a013d2724ab5a43, type: 3}
-  menuSelect: {fileID: 8300000, guid: c72ea718bab75fb4c8d9e5187f3c3717, type: 3}
-  menuToggle: {fileID: 8300000, guid: 53aea17c900e24e43859bdb00cc46953, type: 3}
+  shift:
+    clip: {fileID: 8300000, guid: dcee8d453985d9e478af69134f2bd1e9, type: 3}
+    volume: 0.7
+    pitch: 1
+  rotate:
+    clip: {fileID: 8300000, guid: dcee8d453985d9e478af69134f2bd1e9, type: 3}
+    volume: 0.7
+    pitch: 1.25
+  lockPiece:
+    clip: {fileID: 8300000, guid: 4f228dd99926b454390592d67e16db38, type: 3}
+    volume: 0.31
+    pitch: 1
+  hardDrop:
+    clip: {fileID: 8300000, guid: 7bf4e83089b06404a8ec11ce615f274c, type: 3}
+    volume: 0.37
+    pitch: 1
+  hold:
+    clip: {fileID: 8300000, guid: a26608b9b19a542478b48d01057c1268, type: 3}
+    volume: 0.58
+    pitch: 1
+  clear:
+    clip: {fileID: 8300000, guid: add4eb3e77f19bf4eb15b0c50de3b15d, type: 3}
+    volume: 0.23
+    pitch: 1
+  bigClear:
+    clip: {fileID: 8300000, guid: 1c6b77fa7ea516b4f83fa398cb8584f8, type: 3}
+    volume: 0.44
+    pitch: 1
+  hole:
+    clip: {fileID: 8300000, guid: dcb1c0fd0e57fec41bb085dedc8a005a, type: 3}
+    volume: 0.25
+    pitch: 1
+  levelUp:
+    clip: {fileID: 8300000, guid: 268bcf61d845b344c851e53cf7377050, type: 3}
+    volume: 0.25
+    pitch: 1
+  gameOver:
+    clip: {fileID: 8300000, guid: 807d33e3c28c48646999eefebd43edcc, type: 3}
+    volume: 0.25
+    pitch: 1
+  menuMove:
+    clip: {fileID: 8300000, guid: a5f18abf11e172e44a013d2724ab5a43, type: 3}
+    volume: 0.18
+    pitch: 1
+  menuSelect:
+    clip: {fileID: 8300000, guid: c72ea718bab75fb4c8d9e5187f3c3717, type: 3}
+    volume: 0.35
+    pitch: 1
+  menuToggle:
+    clip: {fileID: 8300000, guid: 53aea17c900e24e43859bdb00cc46953, type: 3}
+    volume: 0.13
+    pitch: 1
   soundsON: 1
   musicPlaying: 1
 --- !u!82 &282646281

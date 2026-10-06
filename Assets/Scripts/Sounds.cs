@@ -1,32 +1,43 @@
 using UnityEngine;
 
-// Music and sound effects. Effects are Kenney CC0 sounds (Assets/Audio/Sfx).
+// Music and sound effects. Each effect has its own volume, set from the
+// clip's measured loudness so nothing is piercing; tweak in the Inspector.
 public class Sounds : MonoBehaviour
 {
-    // "move" plays the frequent, quiet effects; "sounds" the others.
+    [System.Serializable]
+    public class Effect
+    {
+        public AudioClip clip;
+        [Range(0f, 1f)] public float volume = 0.3f;
+        [Range(0.5f, 2f)] public float pitch = 1f;
+    }
+
+    // Levels live in each Effect, not in the mixer: the WebGL player ignores
+    // AudioMixer group volumes, so the clips themselves are levelled.
     public AudioSource move;
     public AudioSource music;
     public AudioSource sounds;
     public AudioClip main;
 
     [Header("Piece")]
-    public AudioClip shift;
-    public AudioClip rotate;
-    public AudioClip lockPiece;
-    public AudioClip hardDrop;
-    public AudioClip hold;
+    public Effect shift;
+    public Effect rotate;
+
+    public Effect lockPiece;
+    public Effect hardDrop;
+    public Effect hold;
 
     [Header("Board")]
-    public AudioClip clear;
-    public AudioClip bigClear;
-    public AudioClip hole;
-    public AudioClip levelUp;
-    public AudioClip gameOver;
+    public Effect clear;
+    public Effect bigClear;
+    public Effect hole;
+    public Effect levelUp;
+    public Effect gameOver;
 
     [Header("Menu")]
-    public AudioClip menuMove;
-    public AudioClip menuSelect;
-    public AudioClip menuToggle;
+    public Effect menuMove;
+    public Effect menuSelect;
+    public Effect menuToggle;
 
     public bool soundsON = true;
     public bool musicPlaying = true;
@@ -41,24 +52,23 @@ public class Sounds : MonoBehaviour
     public void PauseMusic() => music.Pause();
     public void PlayMusic() => music.Play();
 
-    // Small pitch jitter keeps rapid repeats (sliding, locking) from grating.
-    public void PlayShift() => Play(move, shift, 0.5f, 0.06f);
-    public void PlayRotate() => Play(move, rotate, 0.6f, 0.04f);
-    public void PlayLock() => Play(sounds, lockPiece, 0.7f, 0.05f);
-    public void PlayHardDrop() => Play(sounds, hardDrop, 0.9f, 0.03f);
-    public void PlayHold() => Play(move, hold, 0.7f);
-    public void PlayClear(int lines) => Play(sounds, lines >= 4 ? bigClear : clear, 0.9f);
-    public void PlayHole() => Play(sounds, hole, 0.8f);
-    public void PlayLevelUp() => Play(sounds, levelUp, 0.8f);
-    public void PlayGameOver() => Play(sounds, gameOver, 1f);
-    public void PlayMenuMove() => Play(move, menuMove, 0.5f);
-    public void PlayMenuSelect() => Play(sounds, menuSelect, 0.8f);
-    public void PlayMenuToggle() => Play(sounds, menuToggle, 0.8f);
+    public void PlayShift() => Play(move, shift);
+    public void PlayRotate() => Play(move, rotate);
+    public void PlayLock() => Play(sounds, lockPiece);
+    public void PlayHardDrop() => Play(sounds, hardDrop);
+    public void PlayHold() => Play(sounds, hold);
+    public void PlayClear(int lines) => Play(sounds, lines >= 4 ? bigClear : clear);
+    public void PlayHole() => Play(sounds, hole);
+    public void PlayLevelUp() => Play(sounds, levelUp);
+    public void PlayGameOver() => Play(sounds, gameOver);
+    public void PlayMenuMove() => Play(sounds, menuMove);
+    public void PlayMenuSelect() => Play(sounds, menuSelect);
+    public void PlayMenuToggle() => Play(sounds, menuToggle);
 
-    void Play(AudioSource source, AudioClip clip, float volume, float pitchJitter = 0f)
+    void Play(AudioSource source, Effect effect)
     {
-        if (!soundsON || clip == null) return;
-        source.pitch = 1f + Random.Range(-pitchJitter, pitchJitter);
-        source.PlayOneShot(clip, volume);
+        if (!soundsON || effect == null || effect.clip == null) return;
+        source.pitch = effect.pitch;
+        source.PlayOneShot(effect.clip, effect.volume);
     }
 }
