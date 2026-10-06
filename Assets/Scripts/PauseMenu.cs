@@ -18,6 +18,7 @@ public class PauseMenu : MonoBehaviour
     public Color idleColor = new Color(0.96f, 0.9f, 0.8f, 0.6f);
 
     PauseMenuItem[] itemCache;
+    Sounds Audio => controls.sounds;
     Mode mode;
     int selected;
 
@@ -64,7 +65,8 @@ public class PauseMenu : MonoBehaviour
         fullScreen.gameObject.SetActive(!over);
         quit.gameObject.SetActive(controls.CanQuit);
         root.SetActive(true);
-        Select(over ? restart : resume);
+        selected = System.Array.IndexOf(items, over ? restart : resume);
+        Refresh();
     }
 
     void Update()
@@ -80,12 +82,17 @@ public class PauseMenu : MonoBehaviour
 
     public void Select(PauseMenuItem item)
     {
-        selected = System.Array.IndexOf(items, item);
+        int index = System.Array.IndexOf(items, item);
+        if (index != selected && root.activeSelf) Audio.PlayMenuMove();
+        selected = index;
         Refresh();
     }
 
     public void Activate(PauseMenuItem item)
     {
+        if (item.isSetting) Audio.PlayMenuToggle();
+        else Audio.PlayMenuSelect();
+
         if (item == resume) controls.TogglePause();
         else if (item == restart) controls.Restart();
         else if (item == music) controls.ToggleMusic();
@@ -102,6 +109,7 @@ public class PauseMenu : MonoBehaviour
             if (items[next].gameObject.activeSelf)
             {
                 selected = next;
+                Audio.PlayMenuMove();
                 return;
             }
         }

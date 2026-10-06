@@ -1717,14 +1717,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ec318f4275cf664c8e5c9e8e73eec1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  error: {fileID: 8300000, guid: fa1174e11a813e140b380b25b90e3912, type: 3}
   move: {fileID: 282646283}
   music: {fileID: 282646282}
   sounds: {fileID: 282646281}
   main: {fileID: 8300000, guid: f887cdcae36480e4385ff6e836dad972, type: 3}
-  rowFill: {fileID: 8300000, guid: 6f1fb3c2ee87ef847a932e979f8b275e, type: 3}
-  place: {fileID: 8300000, guid: 9c1c6a684a7f77d4f8531b95b9ded156, type: 3}
-  hardDrop: {fileID: 8300000, guid: bd0c1544f66436e4e9621e5b81076d97, type: 3}
+  shift: {fileID: 8300000, guid: 3d113546b33db5143a33394874f68a3a, type: 3}
+  rotate: {fileID: 8300000, guid: 7f0ee8d80defa8d4f941da4d8113a7ac, type: 3}
+  lockPiece: {fileID: 8300000, guid: 4f228dd99926b454390592d67e16db38, type: 3}
+  hardDrop: {fileID: 8300000, guid: 7bf4e83089b06404a8ec11ce615f274c, type: 3}
+  hold: {fileID: 8300000, guid: a26608b9b19a542478b48d01057c1268, type: 3}
+  clear: {fileID: 8300000, guid: add4eb3e77f19bf4eb15b0c50de3b15d, type: 3}
+  bigClear: {fileID: 8300000, guid: 1c6b77fa7ea516b4f83fa398cb8584f8, type: 3}
+  hole: {fileID: 8300000, guid: dcb1c0fd0e57fec41bb085dedc8a005a, type: 3}
+  levelUp: {fileID: 8300000, guid: 268bcf61d845b344c851e53cf7377050, type: 3}
+  gameOver: {fileID: 8300000, guid: 807d33e3c28c48646999eefebd43edcc, type: 3}
+  menuMove: {fileID: 8300000, guid: a5f18abf11e172e44a013d2724ab5a43, type: 3}
+  menuSelect: {fileID: 8300000, guid: c72ea718bab75fb4c8d9e5187f3c3717, type: 3}
+  menuToggle: {fileID: 8300000, guid: 53aea17c900e24e43859bdb00cc46953, type: 3}
   soundsON: 1
   musicPlaying: 1
 --- !u!82 &282646281
@@ -12569,7 +12578,7 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 48
     m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -14241,7 +14250,7 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 48
     m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -14584,7 +14593,7 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 76
     m_Alignment: 5
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -14805,7 +14814,7 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 48
     m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -15285,7 +15294,7 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 130
     m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -15364,7 +15373,7 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 48
     m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -19695,7 +19704,7 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 48
     m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -20047,7 +20056,7 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 48
     m_Alignment: 5
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -25090,7 +25099,7 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 48
     m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -25225,7 +25234,7 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 56
     m_Alignment: 5
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -25485,7 +25494,7 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 48
     m_Alignment: 5
     m_AlignByGeometry: 0
     m_RichText: 1

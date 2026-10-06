@@ -94,7 +94,7 @@ public class TetrimonoBehaviour : MonoBehaviour
     {
         if (!CanAct()) return false;
         if (!current.TryMove(Board, new Vector2Int(direction, 0))) return false;
-        sounds.PlayMove();
+        sounds.PlayShift();
         OnPieceAdjusted();
         return true;
     }
@@ -103,7 +103,7 @@ public class TetrimonoBehaviour : MonoBehaviour
     {
         if (!CanAct()) return;
         if (!current.TryRotate(Board, direction)) return;
-        sounds.PlayMove();
+        sounds.PlayRotate();
         OnPieceAdjusted();
     }
 
@@ -115,7 +115,7 @@ public class TetrimonoBehaviour : MonoBehaviour
         score.AddHardDrop(distance);
         sounds.PlayHardDrop();
         feel.HardDrop(distance);
-        LockPiece();
+        LockPiece(hardDropped: true);
     }
 
     public void Hold()
@@ -127,7 +127,7 @@ public class TetrimonoBehaviour : MonoBehaviour
         held = type;
         holdUsed = true;
         form.DisplayHold(held, false);
-        sounds.PlayMove();
+        sounds.PlayHold();
         Render();
     }
 
@@ -163,18 +163,19 @@ public class TetrimonoBehaviour : MonoBehaviour
         Render();
     }
 
-    void LockPiece()
+    void LockPiece(bool hardDropped = false)
     {
         var cells = new List<Vector2Int>(current.Cells);
         int levelBefore = score.Level;
         LockResult result = Board.Lock(cells, color);
         instance.Redraw();
-        sounds.PlayPlaced();
+        // A hard drop already played its own thud.
+        if (!hardDropped) sounds.PlayLock();
 
         if (result.newHoles.Count > 0)
         {
             score.AddHoles(result.newHoles.Count);
-            sounds.PlayError();
+            sounds.PlayHole();
             var positions = new List<Vector3>(result.newHoles.Count);
             foreach (var hole in result.newHoles)
                 positions.Add(instance.CellToWorld(hole));
@@ -186,7 +187,8 @@ public class TetrimonoBehaviour : MonoBehaviour
         if (cleared > 0)
         {
             score.AddLines(cleared);
-            sounds.PlayRowFill();
+            if (score.Level > levelBefore) sounds.PlayLevelUp();
+            else sounds.PlayClear(cleared);
             var rows = new List<float>(cleared);
             foreach (int row in result.clearedRows)
                 rows.Add(instance.CellToWorld(new Vector2Int(0, row)).y);
@@ -218,7 +220,7 @@ public class TetrimonoBehaviour : MonoBehaviour
             PlayerPrefs.SetInt(BestScoreKey, best);
             PlayerPrefs.Save();
         }
-        sounds.PlayError();
+        sounds.PlayGameOver();
         feel.GameOver();
         foreach (var ghost in ghosts) ghost.Hide();
         UpdateHud();

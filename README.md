@@ -49,3 +49,5 @@ Unity.exe -batchmode -quit -projectPath . -executeMethod BuildScript.BuildAll
 ## Credits
 
 UI font: [Barlow Condensed](https://github.com/jpt/barlow) by The Barlow Project Authors, SIL Open Font License 1.1 (`Assets/Fonts/OFL.txt`).
+
+Sound effects: [Kenney](https://kenney.nl) Interface Sounds, Impact Sounds and Digital Audio packs, CC0 (`Assets/Audio/Sfx/Kenney-License.txt`).
